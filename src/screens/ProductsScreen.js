@@ -3,19 +3,22 @@ import products from '../data/products';
 
 const ProductsScreen = () => {
 
-    return(
-        <FlatList 
-            data={products}
-            renderItem={ ({item}) => (
-            <View style={styles.itemContainer}>
-                <Image 
-                source={{ uri: item.image }} 
-                style={styles.image}
-                />
-            </View>
-            ) }
-            numColumns={4}
-        />
+    return (
+        <View style={styles.container}>
+            <FlatList 
+                data={products}
+                renderItem={ ({item}) => (
+                <View style={styles.itemContainer}>
+                    <Image 
+                    source={{ uri: item.image }} 
+                    style={styles.image}
+                    />
+                </View>
+                ) }
+                numColumns={3}
+                showsVerticalScrollIndicator={false}
+            />
+        </View>
     );
 
 }
@@ -23,8 +26,14 @@ const ProductsScreen = () => {
 export default ProductsScreen;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     itemContainer: {
-      width: "25%",
+      width: "33.33%",
       padding: 1,
     },
     image: { 
