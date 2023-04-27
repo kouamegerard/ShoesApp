@@ -5,23 +5,29 @@ import ProdudctDetailScreen from "../screens/ProductDetailScreen";
 import CartScreen from "../screens/CartScreen";
 import { Pressable, Text, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { selectNumberOfItems } from "../store/slicers/cartSlice";
 
 const Stack = createNativeStackNavigator();
 
-const MiniCart = () => {
+const MiniCart = ({navigation, numberOfItems}) => {
     return <Pressable
         style={{ flexDirection: "row", alignItems: "flex-start" }}
+        onPress={ () =>  navigation.navigate("Cart")}
     >
         <FontAwesome5 
             name="shopping-cart"
             size={18}
             color="#CBCBCB"
         />
-        <Text style={{ color: "#F00", fontSize: 13, fontWeight: "500", alignSelf: "center", position: "absolute", right: -2, top: -5, }}>0</Text>
+        <Text style={{ color: "#F00", fontSize: 13, fontWeight: "500", alignSelf: "center", position: "absolute", right: -2, top: -5, }}>{numberOfItems}</Text>
     </Pressable>
 }
 
+
 const NavigationScreens = () => {
+
+    const numberOfItems = useSelector(selectNumberOfItems)
 
     return (
         <NavigationContainer>
@@ -29,9 +35,9 @@ const NavigationScreens = () => {
                 <Stack.Screen 
                     name="Products" 
                     component={ProductsScreen} 
-                    options={{ 
-                        headerRight: () => ( <MiniCart /> ),
-                    }}
+                    options={({navigation}) => ({
+                        headerRight: () => ( <MiniCart navigation={navigation} numberOfItems={numberOfItems} /> ),
+                    }) }
                 />
                 <Stack.Screen 
                     name="Product Detail" 

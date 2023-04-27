@@ -1,33 +1,52 @@
+// @ts-nocheck
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import cart from "../data/cart";
+import { useSelector } from "react-redux";
 import CartListItem from "../components/CartListItem";
+import { delivery, selectSubtotal } from "../store/slicers/cartSlice";
 
-const CartItemsList = () => (
-    <View style={styles.cartTotal}>
-        <View style={styles.cartTotalRow}>
-            <Text style={styles.cartTotalText}>Subtotal</Text>
-            <Text style={styles.cartTotalText}>96 000CFA</Text>
+const CartItemsList = () => {
+    const subtotal = useSelector( selectSubtotal );
+    const isFreeDelivery = useSelector( delivery );
+    const total = subtotal + isFreeDelivery;
+
+    return (
+        <View style={styles.cartTotal}>
+            <View style={styles.cartTotalRow}>
+                <Text style={styles.cartTotalText}>Subtotal</Text>
+                <Text style={styles.cartTotalText}>{subtotal}CFA</Text>
+            </View>
+            <View style={styles.cartTotalRow}>
+                <Text style={styles.cartTotalText}>Delevery</Text>
+                <Text style={styles.cartTotalText}>{isFreeDelivery}CFA</Text>
+            </View>
+            <View style={styles.cartTotalRow}>
+                <Text style={styles.total}>Total</Text>
+                <Text style={styles.total}>{total}CFA</Text>
+            </View>
         </View>
-        <View style={styles.cartTotalRow}>
-            <Text style={styles.cartTotalText}>Delevery</Text>
-            <Text style={styles.cartTotalText}>2 000CFA</Text>
+    )
+};
+
+const EmptyCart = () => {
+    return (
+        <View style={styles.cartTotal}>
+            <Text style={{ fontSize: 22, fontWeight: "600", }}>Your cart is empty</Text>
         </View>
-        <View style={styles.cartTotalRow}>
-            <Text style={styles.total}>Total</Text>
-            <Text style={styles.total}>98 000CFA</Text>
-        </View>
-    </View>
-);
+    )
+};
 
 const CartScreen = () => {
+    const cartItems = useSelector( (state) => state.cart.items );
+    console.log(cartItems.length);
 
     return (
         <>
             <FlatList 
-                data={cart}
+                data={cartItems}
                 renderItem={ ({item}) => (
                     <CartListItem cartItem={item}/>
                 ) }
+                ListEmptyComponent={EmptyCart}
                 ListFooterComponent={ CartItemsList }
             />
 
